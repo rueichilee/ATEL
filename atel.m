@@ -18,6 +18,7 @@ function results = atel(Y, X, T0, varargin)
 %       'Bandwidth' : Scalar (h). Bandwidth for kernel smoothing. 
 %                     Default: 'auto' (calculated via Cross-Validation).
 %       'Alpha'     : Scalar. Significance level (e.g., 0.05 for 95% CI).
+%       'UseParallel' : Logical (true/false). Parallelize DP step. Default: false.
 %
 %   OUTPUTS (structure):
 %       results.atel      : Scalar point estimate of ATEL.
@@ -41,12 +42,14 @@ function results = atel(Y, X, T0, varargin)
     addParameter(p, 'Basis', 'bspline', @(x) any(validatestring(x, {'bspline', 'polynomial', 'trigonometric'})));
     addParameter(p, 'Bandwidth', [], @(x) isempty(x) || (isscalar(x) && x > 0));
     addParameter(p, 'Alpha', 0.05, @(x) isscalar(x) && x > 0 && x < 1);
+    addParameter(p, 'UseParallel', false, @(x) islogical(x) || x==1 || x==0);
     
     parse(p, Y, X, T0, varargin{:});
     
     J = p.Results.Rank;
     basis_type = p.Results.Basis;
     sig_level = p.Results.Alpha;
+    use_parallel = logical(p.Results.UseParallel);
     
     [N_total, T] = size(Y);
     N = N_total - 1;            % Number of control units
@@ -60,10 +63,7 @@ function results = atel(Y, X, T0, varargin)
     W = construct_weights(X, J, basis_type);
 
     %% 3. Step 2: Estimate Factors (F_t) via Diversified Projection
-    F = zeros(T,J);
-    for j=1:J
-        F(:,j) = mean(Y_N .* W(2:end,1+(j-1)*T:j*T),1)';
-    end
+    F = DP(Y_N, W, J, use_parallel);
 
     F0 = F(1:T0,:);
     F1 = F(T0+1:end,:);

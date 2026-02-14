@@ -39,6 +39,8 @@ You can customize the estimation by passing these options:
   *  *Options:* `'bspline'` (default) ,`'polynomial'` or `'trigonometric'`.
 * **`'Alpha'`** *(Scalar)*: Significance level.
   * *Default:* 0.05 (for 95% CI.)
+* **`'UseParallel'`** *(Boolean)*: Enable parallel computing for the projection step.
+  *  *Default:* false. (Set to true to speed up estimation for large datasets).
 
 ### Outputs
 The function returns a struct `results` containing:
@@ -86,12 +88,14 @@ Here is the core logic used in the test_simulation. This demonstrates how to for
 Rank = J_true; % fix Rank=J_true for this test.
 basis = 'bspline'; % 'bspline', 'polynomial', or 'trigonometric'
 alpha = 0.05; % Significance level (e.g., 0.05 for 95% CI).
+use_parallel = true; % parallel processing
 
 results = atel(y, X, T0, ...
                'Rank', Rank, ...
                'Basis', basis, ...
                'Alpha', alpha, ...
-               'Bandwidth', []); % Auto-select bandwidth via CV
+               'Bandwidth', [], ...
+               'UseParallel', use_parallel); % Auto-select bandwidth via CV
 
 % Outputs (example)
 
@@ -114,7 +118,7 @@ Running ATEL Simulation Test...
 -----------------------------------------
 True Effect:      4.7992
 Estimated (ATEL): 4.3148
-95% CI:           [3.2430, 5.3866]
+95% CI:           [3.9460, 4.6837]
 P-value:          0.0000
 -----------------------------------------
 ```
