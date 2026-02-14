@@ -1,0 +1,25 @@
+# MATLAB Autosave and Backup files
+*.asv
+*.m~
+*.mat~
+
+# System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# MATLAB Project and Configuration files
+*.prj
+*.mlproj
+
+# Compiled MEX files (if you ever add C/C++ code)
+*.mex*
+
+# Octave files (in case someone uses Octave)
+octave-workspace
+
+# Large data files (Optional)
+# If your .mat files are huge (>100MB), uncomment the line below 
+# but keep your demo data by adding !example/data.mat
+# *.mat
+# !example/data.mat
