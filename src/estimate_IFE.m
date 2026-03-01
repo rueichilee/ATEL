@@ -31,7 +31,7 @@ function results = estimate_IFE(y,X,T0,J,h)
     
     % Use Control Units (Rows 2:end) to estimate common structure
     [beta, F] = IFE(y(2:end,:)',XX(:,2:end,:),J);
-    beta = beta(end,1:J);
+    beta = beta(end,1:pp);
     
     %% Estimate Loadings for Treated Unit (Projection)
     X_treated = squeeze(XX(:, 1, :)); % T x P

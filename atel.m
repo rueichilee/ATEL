@@ -96,7 +96,7 @@ function results = atel(Y, X, T0, varargin)
     %% 7. Inference (Asymptotic Normality)
 
     % Calculate standard error
-    [Sigma, Y1_hat_pre] = cal_var(Y1,F0,F1,h);
+    [Sigma, Y1_hat_pre, u_hat] = cal_var(Y1,F0,F1,h);
     se_atel = sqrt(Sigma);
 
     % construct counterfactul outcomes
@@ -112,7 +112,7 @@ function results = atel(Y, X, T0, varargin)
     p_val = 2 * tcdf(-abs(t_stat), T1h-1);
 
     % Calculate pointwise standard error for counterfactual outcomes
-    Sigma_point = cal_pointvar(Y_N,F,h,T1);
+    Sigma_point = cal_pointvar(F,beta,u_hat,h,T1);
     se_point = sqrt(Sigma_point);
     %% 8. Pack Results
     results.atel = atel_val;
@@ -123,7 +123,4 @@ function results = atel(Y, X, T0, varargin)
     results.optimal_h = h;
     results.p_val = p_val;
     results.se_point=se_point;
-    results.W = W;
-    results.F = F;
-    results.beta = beta;
 end

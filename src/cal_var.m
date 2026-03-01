@@ -1,4 +1,4 @@
-function [Sigma, pre_Y_hat] = cal_var(y,F0,F1,h)
+function [Sigma, pre_Y_hat, u_hat] = cal_var(y,F0,F1,h)
 % CAL_VAR Calculates the asymptotic variance of the ATEL estimator
 %
 % This function estimates the variance components defined in Theorem 1.
@@ -15,6 +15,8 @@ function [Sigma, pre_Y_hat] = cal_var(y,F0,F1,h)
 % Output:
 %   Sigma : scalar variance.
 %   Pre_Y_hat : (1 x T0) Estimated Y hat for the pre-treatment period.
+%   u_hat : (1 x T0) Residual for the pre-treatment period.
+
     [T0,J] = size(F0);
     T = length(y);
     T1 = T-T0;
